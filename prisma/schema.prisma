@@ -16,7 +16,7 @@ model User {
   lastName  String?  @map("last_name")
   email     String   @unique
   password  String
-  isAdmin   Boolean  @default(false) @map("is_admin")
+  isAdmin   Boolean? @default(false) @map("is_admin")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
@@ -42,8 +42,8 @@ model Device {
 model BackupConfigDevice {
   uuid       String @id @default(uuid())
   deviceUuid String @map("device_uuid")
-
-  device Device @relation(fields: [deviceUuid], references: [uuid], onDelete: Cascade)
+  config     String @default("")
+  device     Device @relation(fields: [deviceUuid], references: [uuid], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at")
 }
