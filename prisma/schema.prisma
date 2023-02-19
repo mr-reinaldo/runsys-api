@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  uuid      String   @id @default(uuid())
+  firstName String?  @map("first_name")
+  lastName  String?  @map("last_name")
+  email     String   @unique
+  password  String
+  isAdmin   Boolean  @default(false) @map("is_admin")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
+
+  Device Device[]
+}
+
+model Device {
+  uuid     String @id @default(uuid())
+  userUuid String @map("user_uuid")
+
+  hostname   String   @unique
+  port       Int      @default(22)
+  username   String
+  password   String
+  typeDevice String?  @map("type_device")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @map("updated_at")
+
+  user               User                 @relation(fields: [userUuid], references: [uuid], onDelete: Cascade)
+  BackupConfigDevice BackupConfigDevice[]
+}
+
+model BackupConfigDevice {
+  uuid       String @id @default(uuid())
+  deviceUuid String @map("device_uuid")
+
+  device Device @relation(fields: [deviceUuid], references: [uuid], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+}
