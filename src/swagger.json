@@ -1,0 +1,344 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "API",
+        "version": "0.0.1",
+        "description": "API de gereciamento de dispositivos de rede.",
+        "contact": {
+            "name": "API Support",
+            "email": "runsys@email.com"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:4000/api/v1",
+            "description": "API de produção."
+        }
+    ],
+    "paths": {
+        "/signin": {
+            "post": {
+                "summary": "Autenticação de usuário.",
+                "description": "Rota responsável por autenticar um usuário.",
+                "tags": [
+                    "Signin"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Signin"
+                            },
+                            "examples": {
+                                "signin": {
+                                    "value": {
+                                        "email": "john@email.com",
+                                        "password": "123456"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário autenticado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Token"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Credenciais inválidas. A autenticação falhou."
+                    }
+                }
+            }
+        },
+        "/users": {
+            "post": {
+                "summary": "Cria um novo usuário.",
+                "description": "Rota responsável por criar um novo usuário.",
+                "tags": [
+                    "Users"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            },
+                            "examples": {
+                                "user": {
+                                    "value": {
+                                        "firstName": "John",
+                                        "lastName": "Doe",
+                                        "email": "john@email.com",
+                                        "password": "123456"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuário criado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Usuário já existe ou dados inválidos."
+                    }
+                }
+            },
+            "get": {
+                "summary": "Lista todos os usuários.",
+                "description": "Rota responsável por listar todos os usuários.",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuários listados com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Users"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Usuários não encontrados."
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado."
+                    }
+                }
+            }
+        },
+        "/users/{uuid}": {
+            "get": {
+                "summary": "Lista um usuário.",
+                "description": "Rota responsável por listar um usuário.",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID do usuário.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário listado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado."
+                    }
+                }
+            },
+            "put": {
+                "summary": "Atualiza um usuário.",
+                "description": "Rota responsável por atualizar um usuário.",
+                "tags": [
+                    "Users"
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "UUID do usuário.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserUpdate"
+                            },
+                            "examples": {
+                                "userUpdate": {
+                                    "value": {
+                                        "firstName": "John",
+                                        "lastName": "Doe",
+                                        "email": "john@email.com",
+                                        "password": "123456"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Usuário atualizado com sucesso.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/UserUpdate"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Usuário não encontrado."
+                    },
+                    "401": {
+                        "description": "Usuário não autenticado."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "description": "Primeiro nome do usuário."
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "description": "Último nome do usuário."
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email do usuário."
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha do usuário."
+                    }
+                }
+            },
+            "Users": {
+                "type": "object",
+                "properties": {
+                    "uuid": {
+                        "type": "string",
+                        "description": "UUID do usuário."
+                    },
+                    "firstName": {
+                        "type": "string",
+                        "description": "Primeiro nome do usuário."
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "description": "Último nome do usuário."
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email do usuário."
+                    }
+                }
+            },
+            "UserUpdate": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "description": "Primeiro nome do usuário."
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "description": "Último nome do usuário."
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email do usuário."
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha do usuário."
+                    }
+                }
+            },
+            "Signin": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "description": "Email do usuário."
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Senha do usuário."
+                    }
+                }
+            },
+            "Token": {
+                "type": "object",
+                "properties": {
+                    "Auth": {
+                        "type": "boolean",
+                        "description": "Autenticação do usuário."
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "Token de autenticação."
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
