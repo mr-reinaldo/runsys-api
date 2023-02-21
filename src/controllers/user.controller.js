@@ -169,8 +169,6 @@ async function getUsers(req, res) {
                     firstName: true,
                     lastName: true,
                     email: true,
-                    isAdmin: true,
-                    Device: true,
                 },
             }
         );
@@ -180,33 +178,6 @@ async function getUsers(req, res) {
         }
 
         return res.status(200).json(users);
-    }
-    catch (error) {
-        return res.status(500).json({ error: error.message });
-    }
-}
-
-/**
- * Função para verificar usuário logado.
- * @returns {object} - Objeto com os dados do usuário logado.
- * @throws {Error} - Caso ocorra algum erro.
- */
-
-async function getLoggedUser(req, res) {
-    const { uuid } = req.user;
-
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                uuid: String(uuid),
-            },
-        });
-
-        if (!user) {
-            return res.status(404).json({ error: "Usuário não encontrado." });
-        }
-
-        return res.status(200).json(user);
     }
     catch (error) {
         return res.status(500).json({ error: error.message });

@@ -18,14 +18,15 @@ const prisma = new PrismaClient();
 async function login(req, res) {
     const { email, password } = req.body;
 
+    // Verifica se o usuário existe.
     const user = await prisma.user.findUnique({
         where: {
             email,
         },
         select: {
-            uuid: true,
-            email: true,
-            password: true,
+            uuid: true, // Seleciona o uuid do usuário.
+            email: true, // Seleciona o email do usuário.
+            password: true, // Seleciona a senha do usuário.
         },
     });
 
@@ -33,12 +34,14 @@ async function login(req, res) {
         throw new Error('Usuário não encontrado!');
     }
 
+    // Verifica se a senha é válida, comparando a senha informada com a senha do usuário.
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
         throw new Error('Senha inválida!');
     }
 
+    // Gera o token de autenticação, com o uuid e o email do usuário e a chave secreta, e o tempo de expiração.
     const token = jwt.sign({ uuid: user.uuid, email: user.email }, process.env.JWT_SECRET, {
         expiresIn: Number(process.env.JWT_EXPIRES_IN),
     });
@@ -47,6 +50,7 @@ async function login(req, res) {
         throw new Error('Token não gerado!');
     }
 
+    // Retorna o token de autenticação e se o usuário está autenticado.
     res.json({
         auth: true,
         token,
