@@ -4,6 +4,12 @@
   "description": "",
   "type": "module",
   "main": "src/server.js",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/mr-reinaldo/runsys-api/main/LICENSE"
+    }
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/server.js",
